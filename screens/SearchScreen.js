@@ -7,7 +7,7 @@ import ResultsList from '../components/ResultsList';
 
 
 export default function SearchScreen() {
-  const [searchApi, results] = useResults();
+  const [searchApi, results, errorMessage] = useResults();
   const [term, setTerm] = useState('')
 
 
@@ -22,11 +22,28 @@ export default function SearchScreen() {
       <SearchBar
         term={term}
         onTermChange={setTerm}
-        onTermSubmit={()=>searchApi(term)}
+        onTermSubmit={() => searchApi(term)}
       />
-      <ResultsList title='Uygun Restoranlar' results={filterResultsByPrice('₺')} />
-      <ResultsList title='Orta Düzey Restoranlar' results={filterResultsByPrice('₺₺')} />
-      <ResultsList title='Pahalı Restoranlar' results={filterResultsByPrice('₺₺₺')} />
+
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
+
+      {results.length == 0 ? (<></>) : (
+        <>
+          <ResultsList
+            title='Uygun Restoranlar'
+            results={filterResultsByPrice('₺')} />
+
+          <ResultsList
+            title='Orta Düzey Restoranlar'
+            results={filterResultsByPrice('₺₺')} />
+
+          <ResultsList
+            title='Pahalı Restoranlar'
+            results={filterResultsByPrice('₺₺₺')} />
+        </>)
+
+      }
+
     </View>
   )
 }
